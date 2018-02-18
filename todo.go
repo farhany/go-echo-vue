@@ -2,7 +2,9 @@ package main
 
 import (
 	"database/sql"
+	"fmt"
 	"go-echo-vue/handlers"
+	"os"
 
 	"github.com/labstack/echo"
 	_ "github.com/mattn/go-sqlite3"
@@ -20,7 +22,13 @@ func main() {
 	e.PUT("/tasks", handlers.PutTasks(db))
 	e.DELETE("/tasks/:id", handlers.DeleteTask(db))
 
-	e.Logger.Fatal(e.Start(":8090"))
+	port := os.Getenv("PORT")
+	if port == "" {
+		fmt.Print("Port not in env, setting it to 8090")
+		port = "8090"
+	}
+
+	e.Logger.Fatal(e.Start(":" + port))
 }
 
 func initDB(filepath string) *sql.DB {
