@@ -2,10 +2,9 @@ package handlers
 
 import (
 	"database/sql"
+	"go-echo-vue/models"
 	"net/http"
 	"strconv"
-
-	"go-echo-vue/models"
 
 	"github.com/labstack/echo"
 )
@@ -26,7 +25,7 @@ func PutTasks(db *sql.DB) echo.HandlerFunc {
 		var task models.Task
 
 		// map incoming json body to the new task
-		c.Bind(task)
+		c.Bind(&task)
 
 		// ad a task using our new model
 		id, err := models.PutTask(db, task.Name)
