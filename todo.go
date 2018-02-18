@@ -2,6 +2,7 @@ package main
 
 import (
 	"database/sql"
+	"go-echo-vue/handlers"
 
 	"github.com/labstack/echo"
 	_ "github.com/mattn/go-sqlite3"
@@ -13,9 +14,11 @@ func main() {
 
 	e := echo.New()
 
-	e.GET("/tasks", func(c echo.Context) error { return c.JSON(200, "GET Tasks") })
-	e.PUT("/tasks", func(c echo.Context) error { return c.JSON(200, "PUT Tasks") })
-	e.DELETE("/tasks/:id", func(c echo.Context) error { return c.JSON(200, "DELETE Task "+c.Param("id")) })
+	e.File("/", "public/index.html")
+
+	e.GET("/tasks", handlers.GetTasks(db))
+	e.PUT("/tasks", handlers.PutTasks(db))
+	e.DELETE("/tasks/:id", handlers.DeleteTask(db))
 
 	e.Logger.Fatal(e.Start(":8090"))
 }
